@@ -1,11 +1,9 @@
 package com.example.simplecalculator
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.simplecalculator.databinding.ActivityMainBinding
 
 
@@ -21,52 +19,73 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         allClear()
+        setUpListeners()
     }
 
-    fun numberAction(view: View) {
-        val button = view as Button
+    private fun setUpListeners() {
+        binding.apply {
+            var numberButtons = listOf(
+                btnZero,
+                btnOne,
+                btnTwo,
+                btnThree,
+                btnFour,
+                btnFive,
+                btnSix,
+                btnSeven,
+                btnEight,
+                btnNine,
+                btnDot
+            )
+
+            for (btn in numberButtons) {
+                btn.setOnClickListener { numberAction(btn) }
+            }
+        }
+
+        binding.btnPlus.setOnClickListener { operatorAction(binding.btnPlus) }
+        binding.btnMinus.setOnClickListener { operatorAction(binding.btnMinus) }
+        binding.btnDivide.setOnClickListener { operatorAction(binding.btnDivide) }
+        binding.btnMutiply.setOnClickListener { operatorAction(binding.btnMutiply) }
+
+        binding.btnEqual.setOnClickListener { equalsAction() }
+        binding.btnAllClear.setOnClickListener { allClear() }
+        binding.btnBackSpace.setOnClickListener { backSpaceAction() }
+    }
+
+    private fun numberAction(button: Button) {
         val value = button.text.toString()
         if (!isOperatorSelected) {
-            // Entering first number
             if (value == "." && firstNumber.contains(".")) return
             firstNumber += value
-            binding.workingsTV.text = firstNumber
+            binding.tvDisplays.text = firstNumber
         } else {
-            // Entering second number
             if (value == "." && secondNumber.contains(".")) return
             secondNumber += value
-            binding.workingsTV.text = firstNumber + " " + operator + " " + secondNumber
+            binding.tvDisplays.text = firstNumber + " " + operator + " " + secondNumber
         }
     }
 
-    fun operatorAction(view: View) {
-        val button = view as Button
+    private fun operatorAction(button: Button) {
         val op = button.text.toString()
         if (firstNumber.isEmpty()) {
             Toast.makeText(this, "Enter first number", Toast.LENGTH_SHORT).show()
             return
         }
+        val opSymbol = when (op) {
+            "×" -> "*"
+            else -> op
+        }
         if (!isOperatorSelected) {
-            operator = when (op) {
-                "x" -> "*"
-                else -> op
-            }
+            operator = opSymbol
             isOperatorSelected = true
-            binding.workingsTV.text = firstNumber + " " + operator
+            binding.tvDisplays.text = firstNumber + " " + op
         } else {
-            // Operator already selected, allow changing operator before entering second number
             if (secondNumber.isEmpty()) {
-                operator = when (op) {
-                    "x" -> "*"
-                    else -> op
-                }
-                binding.workingsTV.text = firstNumber + " " + operator
+                operator = opSymbol
+                binding.tvDisplays.text = firstNumber + " " + op
             }
         }
-    }
-
-    fun allClearAction(view: View) {
-        allClear()
     }
 
     private fun allClear() {
@@ -74,51 +93,58 @@ class MainActivity : AppCompatActivity() {
         secondNumber = ""
         operator = ""
         isOperatorSelected = false
-        binding.resultsTV.text = ""
-        binding.workingsTV.text = ""
+        binding.tvResult.text = ""
+        binding.tvDisplays.text = ""
     }
 
-    fun equalsAction(view: View) {
+    private fun equalsAction() {
         if (firstNumber.isEmpty() || operator.isEmpty() || secondNumber.isEmpty()) {
             Toast.makeText(this, "Incomplete expression", Toast.LENGTH_SHORT).show()
             return
         }
         try {
             val result = calculate(firstNumber, secondNumber, operator)
-            binding.resultsTV.text = result
+            if (result == "Undefined" || result == "Error") {
+                binding.tvResult.setTextColor(getColor(R.color.red))
+            } else {
+                binding.tvResult.setTextColor(getColor(R.color.white))
+            }
+            binding.tvResult.text = result
         } catch (e: Exception) {
-            binding.resultsTV.text = "Error"
+            binding.tvResult.setTextColor(getColor(R.color.red))
+            binding.tvResult.text = "Error"
+            binding.tvDisplays.text = ""
         }
     }
 
     private fun calculate(num1: String, num2: String, op: String): String {
-        val isInt1 = !num1.contains(".")
-        val isInt2 = !num2.contains(".")
+        val isFirstInt = !num1.contains(".")
+        val isSecondInt = !num2.contains(".")
         val n1 = num1.toDouble()
         val n2 = num2.toDouble()
         val result = when (op) {
             "+" -> n1 + n2
             "-" -> n1 - n2
             "*" -> n1 * n2
-            "/" -> if (n2 != 0.0) n1 / n2 else return "Div by 0"
+            "/" -> if (n2 != 0.0) n1 / n2 else return "Undefined"
             else -> return "Error"
         }
-        return if (isInt1 && isInt2 && result % 1.0 == 0.0) result.toInt().toString() else result.toString()
+        return if (isFirstInt && isSecondInt && result % 1.0 == 0.0) result.toInt().toString() else result.toString()
     }
 
-    fun backSpaceAction(view: View) {
+    private fun backSpaceAction() {
         if (!isOperatorSelected) {
             if (firstNumber.isNotEmpty()) {
                 firstNumber = firstNumber.dropLast(1)
-                binding.workingsTV.text = firstNumber
+                binding.tvDisplays.text = firstNumber
             }
         } else if (secondNumber.isNotEmpty()) {
             secondNumber = secondNumber.dropLast(1)
-            binding.workingsTV.text = firstNumber + " " + operator + " " + secondNumber
+            binding.tvDisplays.text = firstNumber + " " + operator + " " + secondNumber
         } else if (operator.isNotEmpty()) {
             operator = ""
             isOperatorSelected = false
-            binding.workingsTV.text = firstNumber
+            binding.tvDisplays.text = firstNumber
         }
     }
 }

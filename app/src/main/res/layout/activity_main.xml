@@ -16,7 +16,7 @@
         android:padding="20dp">
 
         <TextView
-            android:id="@+id/workingsTV"
+            android:id="@+id/tvDisplays"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=""
@@ -25,13 +25,13 @@
             android:textColor="@color/white"
             android:textAlignment="textEnd"
             android:textSize="25sp"
-            app:layout_constraintBottom_toTopOf="@id/resultsTV"
+            app:layout_constraintBottom_toTopOf="@id/tv_result"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/resultsTV"
+            android:id="@+id/tv_result"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text=""
@@ -51,18 +51,20 @@
         style="@style/buttonRow">
 
         <Button
+            android:id="@+id/btnAllClear"
             style="@style/buttonNumber"
             android:textColor="@color/red"
-            android:onClick="allClearAction"
             android:layout_weight="2"
             android:text="C"/>
+
         <Button
+            android:id="@+id/btnBackSpace"
             style="@style/buttonNumber"
             android:textColor="@color/gray"
-            android:onClick="backSpaceAction"
             android:text="⌫"/>
 
         <Button
+            android:id="@+id/btnDivide"
             style="@style/buttonOperator"
             android:text="/"/>
 
@@ -72,17 +74,21 @@
         style="@style/buttonRow">
 
         <Button
+            android:id="@+id/btnSeven"
             style="@style/buttonNumber"
             android:text="7"/>
         <Button
+            android:id="@+id/btnEight"
             style="@style/buttonNumber"
             android:text="8"/>
         <Button
+            android:id="@+id/btnNine"
             style="@style/buttonNumber"
             android:text="9" />
         <Button
+            android:id="@+id/btnMutiply"
             style="@style/buttonOperator"
-            android:text="x"/>
+            android:text="×"/>
 
     </LinearLayout>
 
@@ -90,15 +96,19 @@
         style="@style/buttonRow">
 
         <Button
+            android:id="@+id/btnFour"
             style="@style/buttonNumber"
             android:text="4"/>
         <Button
+            android:id="@+id/btnFive"
             style="@style/buttonNumber"
             android:text="5"/>
         <Button
+            android:id="@+id/btnSix"
             style="@style/buttonNumber"
             android:text="6" />
         <Button
+            android:id="@+id/btnMinus"
             style="@style/buttonOperator"
             android:text="-"/>
 
@@ -108,15 +118,19 @@
         style="@style/buttonRow">
 
         <Button
+            android:id="@+id/btnOne"
             style="@style/buttonNumber"
             android:text="1"/>
         <Button
+            android:id="@+id/btnTwo"
             style="@style/buttonNumber"
             android:text="2"/>
         <Button
+            android:id="@+id/btnThree"
             style="@style/buttonNumber"
             android:text="3" />
         <Button
+            android:id="@+id/btnPlus"
             style="@style/buttonOperator"
             android:text="+"/>
 
@@ -126,17 +140,19 @@
         style="@style/buttonRow">
 
         <Button
+            android:id="@+id/btnDot"
             style="@style/buttonNumber"
             android:text="."/>
         <Button
+            android:id="@+id/btnZero"
             style="@style/buttonNumber"
             android:text="0"/>
         <Button
+            android:id="@+id/btnEqual"
             style="@style/buttonNumber"
             android:layout_weight="2"
             android:background="@color/orange"
             android:textSize="40sp"
-            android:onClick="equalsAction"
             android:text="=" />
 
     </LinearLayout>
